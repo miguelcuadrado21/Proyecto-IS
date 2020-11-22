@@ -1,0 +1,15 @@
+body {
+    font-size: 2em;
+    font-family: sans-serif;
+    color: #666;
+    }
+    article {
+    background-color: #9ef;
+    margin: 5px;
+    padding: 3px;
+    }
+
+section{
+
+        display: flex;
+    }

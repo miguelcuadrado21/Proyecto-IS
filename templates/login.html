@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <section class="container">
+        <!-- Formulario de login -->
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Usuario</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Contraseña</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+                <small id="emailHelp" class="form-text ">¿Olvido su contraseña?</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </section>
+{% endblock %}  
