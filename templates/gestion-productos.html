@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="item-grid content-grid text-center">
+        <h1>GESTION DE PRODUCTOS</h1>
+        <!-- Formulario de registrar productos -->
+        <!-- Consultar producto-->
+        <form class="form-inline-block m-5 pr-5 pl-5">
+            <input class="form-control" type="search" placeholder="Consultar por nombre o codigo">
+            <button class="btn btn-primary mt-3" type="submit">Consultar</button>
+        </form>
+
+        <!--Mostrar Lista-->
+        <button class="btn btn-primary">Mostrar Lista</button>
+
+        <!--Lista de prodcutos-->
+        <div class="col">
+          <table class="table p-5 mt-3">
+            <tr class="table-muted">
+              <td>Nombre del producto</td>
+              <td>Codigo </td>
+              <td>Precio </td>
+              <td>Cantidad </td>
+              <td>Fecha de Ingreso </td>
+              <td>Fecha de Caducidad </td>
+              <td>Accion</td>
+            </tr>
+            <tr>
+              <td>Nombre</td>
+              <td>012</td>
+              <td>2$</td>
+              <td>2kg</td>
+              <td>3/10/2020</td>
+              <td>10/12/2020</td>
+              <td>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+                <button class="btn btn-sm btn-warning">Modificar</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Nombre</td>
+              <td>012</td>
+              <td>5$</td>
+              <td>12kg</td>
+              <td>3/10/2020</td>
+              <td>10/12/2020</td>
+              <td>
+                <button class="btn btn-sm btn-danger">Eliminar</button>
+                <a href="{{ url_for('modificarProducto') }}" class="btn btn-sm btn-warning">Modificar</a>
+              </td>
+            </tr> 
+          </table>
+          <button class="btn btn-sm btn-danger">Ocultar Lista</button>
+        </div>
+        
+        
+        
+        <!--Agregar Producto-->
+        <a href="{{ url_for('agregarProducto') }}"><button class="btn btn-success mt-5">Agregar Producto</button></a>
+
+        <!--Informacion del producto-->
+        <div class="card pr-5 pl-5 m-5">
+          <div class="card-body">
+            <h4 class="card-title">Nombre del producto</h4>
+            <div class="col">
+              <table class="table">
+                <tr class="table-muted">
+                  <td>Codigo </td>
+                  <td>Precio </td>
+                  <td>Cantidad </td>
+                  <td>Fecha de Ingreso </td>
+                  <td>Fecha de Caducidad </td>
+                </tr>
+                <tr>
+                  <td>012</td>
+                  <td>2$</td>
+                  <td>2kg</td>
+                  <td>3/10/2020</td>
+                  <td>10/12/2020</td>
+                </tr>
+              </table>
+            </div>
+            <a href="#" class="btn btn-danger">Eliminar</a>
+            <a href="{{ url_for('modificarProducto') }}" class="btn btn-warning">Modificar</a>
+          </div>
+        </div>
+
+    </div>
+
+{% endblock %}  

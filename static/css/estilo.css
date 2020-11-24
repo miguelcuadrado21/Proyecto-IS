@@ -1,15 +1,57 @@
 body {
-    font-size: 2em;
-    font-family: sans-serif;
-    color: #666;
-    }
-    article {
-    background-color: #9ef;
-    margin: 5px;
-    padding: 3px;
-    }
+    font-family: Arial;
+}
 
-section{
+/*  Grid Container  */ 
 
-        display: flex;
-    }
+.container-grid {
+    display: grid; 
+    grid-template: 100px 1fr 100px / 200px 1fr 200px;
+    grid-gap: 0px;
+    height: 100vh;
+    /*Distribucion de Areas*/
+    grid-template-areas: "header header header"
+                         "left-nav content right-nav" 
+                         "footer footer footer";
+}
+
+.mostrar {
+    display: grid;
+    grid-template: 1fr / 1fr;
+}
+
+.item-grid {
+    padding: 10px;
+}
+
+/*Distribucion de Areas*/
+
+.header-grid{
+    grid-area: header;
+    background: linear-gradient(to right, #fdc830, #f37335); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+.left-grid{
+    grid-area: left-nav;
+}
+.content-grid{
+    grid-area: content;
+    overflow: auto;
+    background: linear-gradient(to right, #dad299, #b0dab9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.right-grid{
+    grid-area: right-nav;
+}
+
+.footer-grid{
+    grid-area: footer;
+    background: linear-gradient(to right, #fdc830, #f37335); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+/*Estilos*/
+
+.margin{
+    
+}
