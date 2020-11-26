@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macro.html" import render_field %}
+    <div class="item-grid content-grid text-center">
+        <h1>MENU PRINCIPAL</h1>
+        <!-- MENU PRINCIPAL -->
+        <div class="m-5 p-5">
+            <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">GESTION DE PRODUCTOS</a>
+        </div>
+
+        <div class="m-5 p-5">
+            <a class="btn btn-primary" href="{{ url_for('agregarUsuario') }}">GESTION DE USUARIOS</a>
+        </div>
+
+        
+        
+    </div>
+
+{% endblock %}  

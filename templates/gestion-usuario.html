@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="item-grid content-grid text-center">
+        <h1>GESTION DE USUARIOS</h1>
+       
+        <div><a href="{{ url_for('agregarUsuario') }}" class="btn btn-primary">Agregar Usuario</a></div>
+
+        <!--Lista de Usuarios-->
+        <div class="col">
+            <table class="table p-5 mt-3">
+              <tr class="table-muted">
+                <td>Usuario</td>
+                <td>Nombre</td>
+                <td>Apellido </td>
+                <td>Correo Electronico </td>
+                <td>Accion</td>
+              </tr>
+              <tr>
+                <td>KelRuiz</td>
+                <td>Kelvin</td>
+                <td>Ruiz</td>
+                <td>kelvin@email.com</td>
+                <td>
+                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                  <a href="{{ url_for('modificarUsuario') }}" class="btn btn-sm btn-warning">Modificar</a>
+                </td>
+              </tr>
+              <tr>
+                <td>JuaMan</td>
+                <td>Juan</td>
+                <td>Marin</td>
+                <td>juan@email.com</td>
+                <td>
+                  <button class="btn btn-sm btn-danger">Eliminar</button>
+                  <a href="{{ url_for('modificarUsuario') }}" class="btn btn-sm btn-warning">Modificar</a>
+                </td>
+              </tr> 
+            </table>
+            <button class="btn btn-sm btn-danger">Ocultar Lista</button>
+          </div>
+
+    </div>
+
+{% endblock %}  

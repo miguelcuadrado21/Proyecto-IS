@@ -1,27 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    
+{% from "macroagregarproducto.html" import render_field %}  
     <div class="item-grid content-grid text-center">
 
         <h1 class="border-bottom border-light p-2">AGREGAR PRODUCTO</h1>
+       
 
-        <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2">
-            
-            <div class="p-1 m-1"><h4>Nombre del Producto</h4><input type="text" placeholder="Nombre del Producto" class="form-control"></div>
-
-            <div class="p-1 m-1"><h4>Codigo del Producto</h4><input type="number" placeholder="Codigo del Producto" class="form-control"></div>
-
-            <div class="p-1 m-1"><h4>Precio</h4><input type="number" placeholder="Precio del Producto" class="form-control"></div>
-
-            <div class="p-1 m-1"><h4>Cantidad de Ingreso</h4><input type="number" placeholder="Cantidad del Producto" class="form-control"></div>
-
-            <div class="p-1 m-1"><h4>Fecha de Ingreso</h4><input type="date" class="form-control"></div>
-
-            <div class="p-1 m-1"><h4>Fecha de Caducidad</h4> <input type="date" class="form-control"></div>
+        <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2" method="POST">
+            {{ render_field(form.nombre, class='form-control') }}
+            {{ render_field(form.codigo, class='form-control') }}
+            {{ render_field(form.precio, class='form-control') }}
+            {{ render_field(form.cantidad, class='form-control') }}
+            {{ render_field(form.dia_vencimiento, class='form-control') }}
+            {{ render_field(form.mes_vencimiento, class='form-control') }}
+            {{ render_field(form.ano_vencimiento, class='form-control') }}
 
             <button type="submit" class="btn btn-primary p-1 m-5">Agregar</button>
         </form>
+        <div class="m-5 p-5">
+            <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">Volver</a>
+        </div>
     </div>
 
 {% endblock %}  

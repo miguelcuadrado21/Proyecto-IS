@@ -1,5 +1,5 @@
 #importamos flask al proyecto, render_template para cargar htmls
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect
 from wtforms import Form, StringField, TextField
 from wtforms.fields.html5 import EmailField
 from flask import request
@@ -12,11 +12,12 @@ import json
 import requests
 from requests import Session
 from requests.exceptions import HTTPError
+import project
 #instanciamos flask en app
 app = Flask(__name__)
 
 
-#DB Init
+#Inicializamos la Base de Datos
 firebaseConfig={
     "apiKey": "AIzaSyDhw83XTyUu58dOB7M1pCbT5olzakeNUqE",
     "authDomain": "proyectois-47739.firebaseapp.com",
@@ -30,34 +31,95 @@ firebaseConfig={
 cred = credentials.Certificate("firebase-sdk.json")
 firebase=pyrebase.initialize_app(firebaseConfig)
 au=firebase.auth()
+db=firebase.database()
+
 #creamos un ruta a la pagina principal con @app.route('/') y se crea una funcion home
 #la funcion home retorna el html principal
 
+#Login de la App
 @app.route('/',methods=['GET','POST'])
 def login():
+    #Guarda los datos ingresados en el Formulario
     comment_form=forms.CommentForm(request.form)
     if request.method=='POST':
         try:
-            au.sign_in_with_email_and_password(comment_form.email.data,comment_form.password.data)
+            #autenticamos el usuario
+            user=au.sign_in_with_email_and_password(comment_form.email.data,comment_form.password.data)
             print("Login Exitoso") 
-            return render_template("gestion-productos.html") 
+            return redirect(url_for('main'))
         except:
             print("Correo o Contraseña invalido")
     return render_template("login.html",form=comment_form)
 
-@app.route('/gestionProductos')
+@app.route('/gestionProductos',methods=['GET','POST'])
 def gestionProductos():
-    return render_template("gestion-productos.html") 
+    #Guarda los datos ingresados en el formulario
+    gest_form=forms.GestionProducto(request.form)
+    productos=db.get()
+    if request.method=='POST':
+        for item in productos:
+            print(db.child(item.key()).order_by_child("Codigo").equal_to(gest_form.codigo.data))
+            
+    return render_template("gestion-productos.html",data=productos,db=db,form=gest_form) 
 
-@app.route('/agregarProducto')
+@app.route('/agregarProducto',methods=['GET','POST'])
 def agregarProducto():
-    return render_template("agregar-producto.html")  
+    #Guarda los datos ingresados en el formulario
+    add_product=forms.AgregarProducto(request.form)
+    #Ingresa los datos del formulario en la variable  data
+    if request.method=='POST':
+       data={'ANombre':add_product.nombre.data,
+             'BCodigo':add_product.codigo.data,
+             'CPrecio':add_product.precio.data,
+             'DCantidad':add_product.cantidad.data,
+             'EDia':add_product.dia_vencimiento.data,
+             'FMes':add_product.mes_vencimiento.data, 
+             'GAño':add_product.ano_vencimiento.data,    
+            }
+        #Inserta en la Base de Datos
+       db.child(add_product.nombre.data).set(data)
+       return render_template("agregar-producto.html", form=add_product)
+    return render_template("agregar-producto.html",form=add_product)  
 
-@app.route('/moficarProducto')
+@app.route('/modificarProducto')
 def modificarProducto():
+    #Guarda los datos del formulario
     return render_template("modificar-producto.html")           
 
+
+@app.route('/agregarUsuario',methods=['GET','POST'])
+def agregarUsuario():
+    add_user=forms.CommentFormAddUser(request.form)
+    if request.method=='POST':
+        try:
+            user=au.create_user_with_email_and_password(add_user.email.data,add_user.password.data)
+            return redirect(url_for('gestionProductos'))
+        except:
+            return render_template("agregar-usuario.html",form=add_user)
+    return render_template("agregar-usuario.html",form=add_user)
+
+@app.route('/main')
+def main():
+    return render_template("mainmenu.html")
+
+@app.route('/reset',methods=['GET','POST'])
+def reset():
+    comment_form=forms.CommentForm(request.form)
+    if request.method=='POST':
+        try:
+            #autenticamos el usuario
+            print(comment_form.email.data)
+            user=au.send_password_reset_email(comment_form.email.data)
+            return redirect(url_for('login'))
+        except:
+            print("Correo o Contraseña invalido")
+    return render_template("recuperar-contraseña.html",form=comment_form)
 #crea otra ruta a otra pagina del sitio
+@app.route('/delete')
+def delete():
+    
+    return redirect(url_for('gestionProductos'))
+
 
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo

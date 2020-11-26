@@ -12,9 +12,9 @@
         <div>
           {{ render_field(form.password, class='form-control') }}
         </div>
+        <button class="btn btn-link"><a href="{{ url_for('reset') }}">Olvidé mi Contraseña</a></button>
         <button class="btn btn-primary">Iniciar Sesión</button>
         </form>
-        <a href="{{ url_for('gestionProductos') }}">SALTAR A GESTION DE PRODUCTOS</a>
     </div>
 
 {% endblock %}  

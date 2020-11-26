@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macroagregarusuario.html" import render_field %}
+    
+    <div class="item-grid content-grid text-center">
+
+        <h1 class="border-bottom border-light p-2">AGREGAR USUARIO</h1>
+
+        <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2" method="POST">
+            
+            <div class="p-1 m-1">
+                {{ render_field(form.email, class='form-control') }} 
+            </div>
+
+            <div class="p-1 m-1">
+                {{ render_field(form.password, class='form-control') }}           
+            </div>    
+
+
+            <button type="submit" class="btn btn-primary p-1 m-5">Agregar</button>
+        </form>
+        <div class="m-5 p-5">
+            <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">Volver</a>
+        </div>
+    </div>
+
+{% endblock %}  
