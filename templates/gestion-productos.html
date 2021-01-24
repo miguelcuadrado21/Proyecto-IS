@@ -37,49 +37,26 @@
                 {% endfor %}
                 <td>
                   
-                  <button name="{{item.key()}}" method="POST" class="btn btn-sm btn-danger">Eliminar</button>
-                  <button name="{{item.key()}}" class="btn btn-sm btn-warning">Modificar</button>
+                  
+                    <a href="/eliminar/{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</a>
+                    <a href="/editar/{{item.key()}}" class="btn btn-sm btn-warning">Modificar</a>
+                   <!-- <button id="{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</button>
+                    <button id="{{item.key()}}" class="btn btn-sm btn-warning">Modificar</button>-->
+                  
+                  
                 
                 </td>
               </tr> 
-              
-            {% endfor %} 
-
+              {% endfor %}
           </table>
          <!-- <button class="btn btn-sm btn-danger">Ocultar Lista</button>-->
         </div>
         
         
-        
         <!--Agregar Producto-->
         <a href="{{ url_for('agregarProducto') }}"><button class="btn btn-success mt-5">Agregar Producto</button></a>
 
-        <!--Informacion del producto-->
-        <!--<div class="card pr-5 pl-5 m-5">
-          <div class="card-body">
-            <h4 class="card-title">Nombre del producto</h4>
-            <div class="col">
-              <table class="table">
-                <tr class="table-muted">
-                  <td>Codigo </td>
-                  <td>Precio </td>
-                  <td>Cantidad </td>
-                  <td>Fecha de Ingreso </td>
-                  <td>Fecha de Caducidad </td>
-                </tr>
-                <tr>
-                  <td>012</td>
-                  <td>2$</td>
-                  <td>2kg</td>
-                  <td>3/10/2020</td>
-                  <td>10/12/2020</td>
-                </tr>
-              </table>
-            </div>
-            <a href="#" class="btn btn-danger">Eliminar</a>
-            <a href="{{ url_for('modificarProducto') }}" class="btn btn-warning">Modificar</a>
-          </div>
-        </div>-->
+        
 
     </div>
 

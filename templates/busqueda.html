@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="item-grid content-grid text-center">
+    <h1>RESULTADO DE CONSULTA</h1>
+    <!-- Formulario de registrar productos -->
+    <!-- Consultar producto-->
+
+    <!--Mostrar Lista-->
+    <button class="btn btn-primary">Mostrar Lista</button>
+
+    <!--Lista de prodcutos-->
+    <div class="col">
+      <table class="table p-5 mt-3">
+        <tr class="table-muted">
+          <td>Nombre del producto</td>
+          <td>Codigo </td>
+          <td>Precio (Kg) </td>
+          <td>Cantidad </td>
+          <td>Dia Vencimiento </td>
+          <td>Mes Vencimiento </td>
+          <td>Año Vencimiento </td>
+          <td>Accion</td>
+        </tr>
+        
+        
+        {% for item in data.each()%}
+            <tr>
+                 
+                {%set sub=db.child(item.key()).get()%}
+                {%if item.key()==prod%}
+                {%for obj in sub.each()%}
+                  <td name="{{obj.val()}}">{{obj.val()}}</td>
+                {% endfor %}
+                <td>
+                  <a href="/eliminar/{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</a>
+                  
+                  <a href="/modificar/{{item.key()}}" class="btn btn-sm btn-warning">Modificar</a>
+                  {%endif%} 
+                </td>
+              </tr> 
+              
+            {% endfor %} 
+            <div class="m-5 p-5">
+                <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">GESTION DE PRODUCTOS</a>
+            </div>
+        
+
+      </table>
+     <!-- <button class="btn btn-sm btn-danger">Ocultar Lista</button>-->
+    </div>
+
+{% endblock %}  

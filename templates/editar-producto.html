@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macroagregarproducto.html" import render_field %} 
+    <div class="item-grid content-grid text-center">
+
+      
+        <h1 class="border-bottom border-light p-2">MODIFICAR PRODUCTO</h1>
+
+        <div class="card pr-5 pl-5 m-5">
+            <div class="card-body">
+                <table class="table">
+                 <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2" method="POST">
+                  <tr>
+                  {{ render_field(form.nombre, class='form-control',value=(db.child(id).child("ANombre").get()).val())}}
+                  {{ render_field(form.codigo, class='form-control' ,value=(db.child(id).child("BCodigo").get()).val()) }}
+                  {{ render_field(form.precio, class='form-control' ,value=(db.child(id).child("CPrecio").get()).val()) }}
+                  {{ render_field(form.cantidad, class='form-control', value=(db.child(id).child("DCantidad").get()).val()) }}
+                  {{ render_field(form.dia_vencimiento, class='form-control' ,value=(db.child(id).child("EDia").get()).val()) }}
+                  {{ render_field(form.mes_vencimiento, class='form-control' ,value=(db.child(id).child("FMes").get()).val()) }}
+                  {{ render_field(form.ano_vencimiento, class='form-control' ,value=(db.child(id).child("GAño").get()).val()) }}
+                  
+                </tr> 
+              </table>
+              <button type="submit" class="btn btn-success">ACEPTAR CAMBIOS</button> 
+                </form>
+                
+              <div class="m-5 p-5">
+                <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">Volver</a>
+              </div>
+            </div>
+          </div>
+    </div>
+
+{% endblock %}  

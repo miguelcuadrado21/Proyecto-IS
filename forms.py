@@ -1,9 +1,9 @@
-from wtforms import Form, StringField, TextField
+from wtforms import Form, StringField, TextField,PasswordField,validators
 from wtforms.fields.html5 import EmailField
 from wtforms import validators
 class CommentForm(Form):
     email=EmailField('Correo Electronico')
-    password=StringField('Contraseña')
+    password=PasswordField('Contraseña')
 
 class AgregarProducto(Form):
     nombre=StringField('Nombre')
@@ -16,6 +16,3 @@ class AgregarProducto(Form):
 class GestionProducto(Form):
     nombre=StringField('Nombre')
     codigo=StringField('Codigo')
-class CommentFormAddUser(Form):
-    email=EmailField('Correo Electronico')
-    password=StringField('Contraseña (minimo 6 caracteres)')

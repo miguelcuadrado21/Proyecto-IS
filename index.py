@@ -57,10 +57,12 @@ def gestionProductos():
     gest_form=forms.GestionProducto(request.form)
     productos=db.get()
     if request.method=='POST':
-        for item in productos:
-            print(db.child(item.key()).order_by_child("Codigo").equal_to(gest_form.codigo.data))
-            
+        for item in productos.each():
+            if gest_form.nombre.data==item.key():
+                
+                return render_template("busqueda.html",prod=item.key(),db=db,data=productos)
     return render_template("gestion-productos.html",data=productos,db=db,form=gest_form) 
+
 
 @app.route('/agregarProducto',methods=['GET','POST'])
 def agregarProducto():
@@ -81,15 +83,12 @@ def agregarProducto():
        return render_template("agregar-producto.html", form=add_product)
     return render_template("agregar-producto.html",form=add_product)  
 
-@app.route('/modificarProducto')
-def modificarProducto():
-    #Guarda los datos del formulario
-    return render_template("modificar-producto.html")           
+       
 
 
 @app.route('/agregarUsuario',methods=['GET','POST'])
 def agregarUsuario():
-    add_user=forms.CommentFormAddUser(request.form)
+    add_user=forms.CommentForm(request.form)
     if request.method=='POST':
         try:
             user=au.create_user_with_email_and_password(add_user.email.data,add_user.password.data)
@@ -115,11 +114,30 @@ def reset():
             print("Correo o Contraseña invalido")
     return render_template("recuperar-contraseña.html",form=comment_form)
 #crea otra ruta a otra pagina del sitio
-@app.route('/delete')
-def delete():
-    
+@app.route('/eliminar/<id>')
+def eliminar(id):
+    db.child(id).remove()
     return redirect(url_for('gestionProductos'))
 
+@app.route('/editar/<id>',methods=["GET","POST"])
+def editar(id):
+    productos=db.get()
+    add_product=forms.AgregarProducto(request.form)
+    #Ingresa los datos del formulario en la variable  data
+    if request.method=='POST':
+       data={'ANombre':add_product.nombre.data,
+             'BCodigo':add_product.codigo.data,
+             'CPrecio':add_product.precio.data,
+             'DCantidad':add_product.cantidad.data,
+             'EDia':add_product.dia_vencimiento.data,
+             'FMes':add_product.mes_vencimiento.data, 
+             'GAño':add_product.ano_vencimiento.data,    
+            }
+        #Inserta en la Base de Datos
+       db.child(add_product.nombre.data).set(data)
+       return redirect(url_for('gestionProductos'))
+
+    return render_template("editar-producto.html",form=add_product,id=id,db=db,data=productos)
 
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo
