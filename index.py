@@ -1,5 +1,5 @@
 #importamos flask al proyecto, render_template para cargar htmls
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect,request
 from wtforms import Form, StringField, TextField
 from wtforms.fields.html5 import EmailField
 from flask import request
@@ -13,10 +13,19 @@ import requests
 from requests import Session
 from requests.exceptions import HTTPError
 import project
+
+
+
+
+
+
+
+
+#-------------------------------------------------INSTANCIAS-----------------------------------------------------------------------
+
+
 #instanciamos flask en app
 app = Flask(__name__)
-
-
 #Inicializamos la Base de Datos
 firebaseConfig={
     "apiKey": "AIzaSyDhw83XTyUu58dOB7M1pCbT5olzakeNUqE",
@@ -33,8 +42,11 @@ firebase=pyrebase.initialize_app(firebaseConfig)
 au=firebase.auth()
 db=firebase.database()
 
-#creamos un ruta a la pagina principal con @app.route('/') y se crea una funcion home
-#la funcion home retorna el html principal
+
+
+
+#-------------------------------------------------GESTION DE USUARIO-----------------------------------------------------------------------
+
 
 #Login de la App
 @app.route('/',methods=['GET','POST'])
@@ -51,41 +63,6 @@ def login():
             print("Correo o Contraseña invalido")
     return render_template("login.html",form=comment_form)
 
-@app.route('/gestionProductos',methods=['GET','POST'])
-def gestionProductos():
-    #Guarda los datos ingresados en el formulario
-    gest_form=forms.GestionProducto(request.form)
-    productos=db.get()
-    if request.method=='POST':
-        for item in productos.each():
-            if gest_form.nombre.data==item.key():
-                
-                return render_template("busqueda.html",prod=item.key(),db=db,data=productos)
-    return render_template("gestion-productos.html",data=productos,db=db,form=gest_form) 
-
-
-@app.route('/agregarProducto',methods=['GET','POST'])
-def agregarProducto():
-    #Guarda los datos ingresados en el formulario
-    add_product=forms.AgregarProducto(request.form)
-    #Ingresa los datos del formulario en la variable  data
-    if request.method=='POST':
-       data={'ANombre':add_product.nombre.data,
-             'BCodigo':add_product.codigo.data,
-             'CPrecio':add_product.precio.data,
-             'DCantidad':add_product.cantidad.data,
-             'EDia':add_product.dia_vencimiento.data,
-             'FMes':add_product.mes_vencimiento.data, 
-             'GAño':add_product.ano_vencimiento.data,    
-            }
-        #Inserta en la Base de Datos
-       db.child(add_product.nombre.data).set(data)
-       return render_template("agregar-producto.html", form=add_product)
-    return render_template("agregar-producto.html",form=add_product)  
-
-       
-
-
 @app.route('/agregarUsuario',methods=['GET','POST'])
 def agregarUsuario():
     add_user=forms.CommentForm(request.form)
@@ -96,10 +73,6 @@ def agregarUsuario():
         except:
             return render_template("agregar-usuario.html",form=add_user)
     return render_template("agregar-usuario.html",form=add_user)
-
-@app.route('/main')
-def main():
-    return render_template("mainmenu.html")
 
 @app.route('/reset',methods=['GET','POST'])
 def reset():
@@ -113,6 +86,52 @@ def reset():
         except:
             print("Correo o Contraseña invalido")
     return render_template("recuperar-contraseña.html",form=comment_form)
+
+
+
+#-------------------------------------------------GESTION DE PRODUCTO-----------------------------------------------------------------------
+
+
+@app.route('/gestionProductos',methods=['GET','POST'])
+def gestionProductos():
+    #Guarda los datos ingresados en el formulario
+    gest_form=forms.GestionProducto(request.form)
+    productos=db.get()
+    if request.method=='POST':
+        for item in productos.each():
+            if gest_form.nombre.data==item.key():
+                
+                return render_template("busqueda.html",prod=item.key(),db=db,data=productos)
+    return render_template("gestion-productos.html",data=productos,db=db,form=gest_form) 
+def validarcodigo(x):
+    producto=db.get()
+    for item in producto:
+        if (db.child(item.key()).child("BCodigo").get()).val()==x:
+            x=x+1
+            validarcodigo(x)
+            print(x)
+            return x
+    return x
+@app.route('/agregarProducto',methods=['GET','POST'])
+def agregarProducto():
+    #Guarda los datos ingresados en el formulario
+    add_product=forms.AgregarProducto(request.form)
+    
+    #Ingresa los datos del formulario en la variable  data
+    if request.method=='POST':
+       data={'ANombre':add_product.nombre.data,
+             'BCodigo':validarcodigo(add_product.codigo.data),
+             'CPrecio':add_product.precio.data,
+             'DCantidad':add_product.cantidad.data,
+             'EDia':add_product.dia_vencimiento.data,
+             'FMes':add_product.mes_vencimiento.data, 
+             'GAño':add_product.ano_vencimiento.data,    
+            }
+        #Inserta en la Base de Datos
+       db.child(add_product.nombre.data).set(data)
+       return render_template("agregar-producto.html", form=add_product)
+    return render_template("agregar-producto.html",form=add_product)  
+
 #crea otra ruta a otra pagina del sitio
 @app.route('/eliminar/<id>')
 def eliminar(id):
@@ -126,7 +145,7 @@ def editar(id):
     #Ingresa los datos del formulario en la variable  data
     if request.method=='POST':
        data={'ANombre':add_product.nombre.data,
-             'BCodigo':add_product.codigo.data,
+             'BCodigo':validarcodigo(add_product.codigo.data),
              'CPrecio':add_product.precio.data,
              'DCantidad':add_product.cantidad.data,
              'EDia':add_product.dia_vencimiento.data,
@@ -139,7 +158,17 @@ def editar(id):
 
     return render_template("editar-producto.html",form=add_product,id=id,db=db,data=productos)
 
+
+
+
+
+
+
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo
+@app.route('/main')
+def main():
+    return render_template("mainmenu.html")
 if __name__ == '__main__':
     app.run(debug=True)
+
