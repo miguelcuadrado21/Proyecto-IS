@@ -203,6 +203,22 @@ def salida(id):
     return render_template("control-entrada.html",form=add_product,id=id,db=db,data=productos)
 
 
+@app.route('/gestionOfertas')
+def gestionOferta():
+    return render_template("gestion-oferta.html")
+@app.route('/agregarOferta',methods=['GET','POST'])
+@app.route('/modificarOferta',methods=['GET','POST'])
+def agregarOferta():
+    add_oferta = forms.AgregarOferta(request.form)
+    if request.method == 'POST':
+        db.child(add_oferta.nombre).update({'HOferta':add_oferta.oferta})
+    return render_template("gestion-oferta.html")
+@app.route('/eliminarOferta/<id>')
+def eliminarOferta(id):
+    db.child(id).child('HOferta').remove()
+    return render_template("gestion-oferta.html")
+
+
 
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo
