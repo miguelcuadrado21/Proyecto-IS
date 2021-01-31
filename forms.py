@@ -17,3 +17,7 @@ class AgregarProducto(Form):
 class GestionProducto(Form):
     nombre=StringField('Nombre')
     codigo=StringField('Codigo')
+
+class AgregarOferta(Form):
+    nombre=StringField('Nombre',[InputRequired()])
+    oferta=IntegerField('Oferta (Descuento)',[DataRequired(), NumberRange(min=1,max=100,message='Debe estar entre 1 y 100')])
