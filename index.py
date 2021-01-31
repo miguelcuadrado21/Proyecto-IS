@@ -12,8 +12,6 @@ import json
 import requests
 from requests import Session
 from requests.exceptions import HTTPError
-import project
-
 
 
 
@@ -108,9 +106,9 @@ def validarcodigo(x):
     for item in producto:
         if (db.child(item.key()).child("BCodigo").get()).val()==x:
             x=x+1
-            validarcodigo(x)
             print(x)
-            return x
+            return validarcodigo(x)
+    
     return x
 @app.route('/agregarProducto',methods=['GET','POST'])
 def agregarProducto():
@@ -158,14 +156,58 @@ def editar(id):
 
     return render_template("editar-producto.html",form=add_product,id=id,db=db,data=productos)
 
+@app.route('/entrada/<id>',methods=["GET","POST"])
 
+def entrada(id):
+    productos=db.get()
+    add_product=forms.AgregarProducto(request.form)
+    #Ingresa los datos del formulario en la variable  data
+    if request.method=='POST':
+       cantidad1=float(db.child(id).child("DCantidad").get().val())
+       cantidad2=float(add_product.cantidad.data)
+       nuevacantidad= cantidad1 + cantidad2
+       data={'ANombre':add_product.nombre.data,
+             'BCodigo':add_product.codigo.data,
+             'CPrecio':add_product.precio.data,
+             'DCantidad':str(nuevacantidad),
+             'EDia':add_product.dia_vencimiento.data,
+             'FMes':add_product.mes_vencimiento.data, 
+             'GAño':add_product.ano_vencimiento.data,    
+            }
+        #Inserta en la Base de Datos
+       db.child(add_product.nombre.data).set(data)
+       return redirect(url_for('gestionProductos'))
 
+    return render_template("control-entrada.html",form=add_product,id=id,db=db,data=productos)
+@app.route('/salida/<id>',methods=["GET","POST"])
+def salida(id):
+    productos=db.get()
+    add_product=forms.AgregarProducto(request.form)
+    #Ingresa los datos del formulario en la variable  data
+    if request.method=='POST':
+       cantidad1=float(db.child(id).child("DCantidad").get().val())
+       cantidad2=float(add_product.cantidad.data)
+       nuevacantidad= cantidad1 - cantidad2
+       data={'ANombre':add_product.nombre.data,
+             'BCodigo':add_product.codigo.data,
+             'CPrecio':add_product.precio.data,
+             'DCantidad':str(nuevacantidad),
+             'EDia':add_product.dia_vencimiento.data,
+             'FMes':add_product.mes_vencimiento.data, 
+             'GAño':add_product.ano_vencimiento.data,    
+            }
+        #Inserta en la Base de Datos
+       db.child(add_product.nombre.data).set(data)
+       return redirect(url_for('gestionProductos'))
 
+    return render_template("control-entrada.html",form=add_product,id=id,db=db,data=productos)
 
 
 
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo
+
+
 @app.route('/main')
 def main():
     return render_template("mainmenu.html")

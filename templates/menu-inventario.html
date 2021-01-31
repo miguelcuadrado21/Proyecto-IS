@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macro.html" import render_field %}
+    <div class="item-grid content-grid text-center">
+        <h1>MENU INVENTARIO</h1>
+        <!-- MENU PRINCIPAL -->
+        <div class="m-1 p-2">
+            <a class="btn btn-primary" href="{{ url_for('entrada') }}">CONTROL DE ENTRADA</a>
+        </div>
+
+        <div class="m-1 p-2">
+            <a class="btn btn-primary" href="{{ url_for('salida') }}">CONTROL DE SALIDA</a>
+        </div>
+      
+
+        
+        
+    </div>
+
+{% endblock %}  

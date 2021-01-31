@@ -36,10 +36,16 @@
                   <td name="{{obj.val()}}">{{obj.val()}}</td>
                 {% endfor %}
                 <td>
-                  
-                  
+                    <div class="pull-left">
+                      <a href="/entrada/{{item.key()}}" class="btn btn-sm btn-primary">Entrada</a>
+                      <a href="/salida/{{item.key()}}" class="btn btn-sm btn-primary">Salida</a>
+                    </div>
+                    
+                   <div class="pull-left">
                     <a href="/eliminar/{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</a>
                     <a href="/editar/{{item.key()}}" class="btn btn-sm btn-warning">Modificar</a>
+                   </div>
+                    
                    <!-- <button id="{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</button>
                     <button id="{{item.key()}}" class="btn btn-sm btn-warning">Modificar</button>-->
                   
@@ -55,7 +61,7 @@
         
         <!--Agregar Producto-->
         <a href="{{ url_for('agregarProducto') }}"><button class="btn btn-success mt-5">Agregar Producto</button></a>
-
+        <a href="{{ url_for('main') }}"><button class="btn btn-success mt-5">MENÚ PRINCIPAL</button></a>
         
 
     </div>
