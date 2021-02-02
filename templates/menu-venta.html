@@ -30,6 +30,10 @@
                         <td name="{{item.key()}}">{{item.key()}}</td>
                         <td name="{{item.val()}}">{{item.val()}}</td>
                         {% set precio=(dab.child(item.key()).child("CPrecio").get()).val()|float * item.val()|float %}
+                        {%if (dab.child(item.key()).child("HOferta").get()).val()%}
+                        {%set precio=precio*((dab.child(item.key()).child("HOferta").get()).val())|float/100%}
+                        {%endif%}
+                        
                         <td name="">{{precio}}</td>
                     {% endfor %}
                     </tr>
