@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macroagregarproducto.html" import render_field %}  
+    <div class="item-grid content-grid text-center">
+
+        <h1 class="border-bottom border-light p-2">PUNTO DE VENTA</h1>
+       
+
+        
+       
+
+        <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2" method="POST">
+            {{ render_field(form.nombre, class='form-control',pattern="[a-zA-Z\s]{3,}") }}
+            {{ render_field(form.cantidad, class='form-control',pattern="[+]?[0-9]*[.]?[0-9]+") }}
+
+            <button type="submit" class="btn btn-primary p-1 m-5">Agregar</button>
+        </form>
+        <div class="col">
+            <table class="table p-5 mt-3">
+                <tr class="table-muted">
+                    <tr>
+                        <td>Producto</td>
+                        <td>Cantidad</td>
+                        <td>A Pagar</td>
+                    </tr>
+                    {%if db%}
+                    {%for item in db.each()%}
+                    <tr>
+                        <td name="{{item.key()}}">{{item.key()}}</td>
+                        <td name="{{item.val()}}">{{item.val()}}</td>
+                        {% set precio=(dab.child(item.key()).child("CPrecio").get()).val()|float * item.val()|float %}
+                        <td name="">{{precio}}</td>
+                    {% endfor %}
+                    </tr>
+                     {%endif%}   
+                    
+                </tr>
+            </table>
+        </div>
+        <div class="m-5 p-5">
+            <a class="btn btn-success" href="{{ url_for('procesar') }}">Procesar</a>
+            <a class="btn btn-danger" href="/eliminar/Compra">Cancelar</a>
+        </div>
+        
+
+        <div class="m-5 p-5">
+            
+            <a class="btn btn-primary" href="{{ url_for('gestionProductos') }}">Volver</a>
+        </div>
+    </div>
+
+{% endblock %}  

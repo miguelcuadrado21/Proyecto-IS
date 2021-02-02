@@ -33,6 +33,11 @@
                   <td name="{{obj.val()}}">{{obj.val()}}</td>
                 {% endfor %}
                 <td>
+                <div class="pull-left">
+                  <a href="/entrada/{{item.key()}}" class="btn btn-sm btn-primary">Entrada</a>
+                  <a href="/salida/{{item.key()}}" class="btn btn-sm btn-primary">Salida</a>
+                </div>
+                
                   <a href="/eliminar/{{item.key()}}" class="btn btn-sm btn-danger">Eliminar</a>
                   
                   <a href="/editar/{{item.key()}}" class="btn btn-sm btn-warning">Modificar</a>

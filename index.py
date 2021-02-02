@@ -203,11 +203,82 @@ def salida(id):
     return render_template("control-entrada.html",form=add_product,id=id,db=db,data=productos)
 
 
+#----------------------------------------------------GESTIÓN OFERTAS-----------------------------------------------------------------
+@app.route('/gestionOferta')
+def gestionOferta():
+    return render_template("gestion-oferta.html")
+
+
+@app.route('/agregarOferta',methods=['GET','POST'])
+def agregarOferta():
+    add_oferta = forms.AgregarOferta(request.form)
+    if request.method == 'POST':
+        db.child(add_oferta.nombre.data).update({'HOferta':add_oferta.oferta.data})
+        return render_template("gestion-oferta.html")
+    return render_template("agregar-oferta.html", form=add_oferta)
+
+
+
+@app.route('/modificarOferta',methods=['GET','POST'])
+def modificarOferta():
+    add_oferta = forms.AgregarOferta(request.form)
+    if request.method == 'POST':
+        db.child(add_oferta.nombre.data).update({'HOferta':add_oferta.oferta.data})
+        return render_template("gestion-oferta.html")
+    return render_template("modificar-oferta.html", form=add_oferta)
+
+
+
+@app.route('/eliminarOferta',methods=['GET','POST'])
+def eliminarOferta():
+    delete_oferta = forms.AgregarOferta(request.form)
+    if request.method == 'POST':
+        db.child(delete_oferta.nombre.data).child('HOferta').remove()
+        return render_template("gestion-oferta.html")
+    return render_template("eliminar-oferta.html", form=delete_oferta)
+
+#------------------------------------------------------------GESTION DE VENTA-----------------------------------------------------
+
+
+
+@app.route('/agregarElemento',methods=['GET','POST'])
+def agregarElemento():
+    add_product = forms.AgregarProducto(request.form)
+    if request.method == 'POST':
+        db.child("Compra").update({add_product.nombre.data:add_product.cantidad.data})
+        return render_template("menu-venta.html", form=add_product,db=db.child("Compra").get(),dab=db)
+    return render_template("menu-venta.html",form=add_product)
+
+@app.route('/procesar',methods=['GET','POST'])
+def procesar():
+    productos=db.child("Compra").get()
+    for item in productos.each():
+      actualizar(item.key(),item.val())
+    eliminar("Compra")
+    return redirect(url_for('gestionProductos'))
+
+def actualizar(id,cantidad):
+    #Ingresa los datos del formulario en la variable  data
+    cantidad1=float(db.child(id).child("DCantidad").get().val())
+    cantidad2=float(cantidad)
+    nuevacantidad= cantidad1 - cantidad2
+        #Inserta en la Base de Datos
+    db.child(id).update({"DCantidad":str(nuevacantidad)})
+    
+   
+    
+
+
+
+
+
 
 #validacion para crear un escucha y decile este es el.
 #dubug=True le dice al servidor que entre en modo de pruebas se reiniciara cada vez que cambie algo
-
-
+'''@app.route('/menuInventario')
+def menuInventario():
+    return render_template("menu-inventario.html")
+'''
 @app.route('/main')
 def main():
     return render_template("mainmenu.html")

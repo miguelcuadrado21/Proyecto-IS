@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macroagregarproducto.html" import render_field %}  
+    <div class="item-grid content-grid text-center">
+
+        <h1 class="border-bottom border-light p-2">ELIMINAR OFERTA</h1>
+       
+
+        <form class="mostrar form-group pr-5 pl-5 mr-5 ml-5 mt-2" method="POST">
+            {{ render_field(form.nombre, class='form-control',pattern="[a-zA-Z\s]{3,}") }}
+
+            <button type="submit" class="btn btn-primary p-1 m-5">Eliminar</button>
+        </form>
+        <div class="m-5 p-5">
+            <a class="btn btn-primary" href="{{ url_for('gestionOferta') }}">Volver</a>
+        </div>
+    </div>
+
+{% endblock %}  
